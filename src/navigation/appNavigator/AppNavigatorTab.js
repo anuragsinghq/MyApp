@@ -27,7 +27,7 @@ const AppNavigator=()=> {
                   focused ? <Icon name="home" size={20} color="#00f" /> : <Icon name="home" size={20} color="grey" />
                 ),
               }}
-              name="Home" component={HomeNavigator} />
+              name="Home1" component={HomeNavigator} />
               <AppNavigatorBottomTab.Screen  
                options={{
                 tabBarLabel: 'Camera',
@@ -35,7 +35,7 @@ const AppNavigator=()=> {
                   focused ? <Icon name="camera" size={20} color="#00f" /> : <Icon name="camera" size={20} color="grey" />
                 ),
               }}
-              name="Camera" component={CameraNavigator} />
+              name="Camera1" component={CameraNavigator} />
                <AppNavigatorBottomTab.Screen  
                 options={{
                   tabBarLabel: 'Dowload',
@@ -43,7 +43,7 @@ const AppNavigator=()=> {
                     focused ? <Icon name="cloud-download" size={20} color="#00f" /> : <Icon name="cloud-download" size={20} color="grey" />
                   ),
                 }}
-              name="GetData" component={GetDataNavigator} />
+              name="GetData1" component={GetDataNavigator} />
                <AppNavigatorBottomTab.Screen  
                 options={{
                   tabBarLabel: 'Store',
@@ -59,7 +59,7 @@ const AppNavigator=()=> {
                     focused ? <Icon name="location" size={20} color="#00f" /> : <Icon name="location" size={20} color="grey" />
                   ),
                 }}
-              name="Map" component={LocationNavigator} />
+              name="Map1" component={LocationNavigator} />
         </AppNavigatorBottomTab.Navigator>
     </NavigationContainer>
   );
