@@ -1,5 +1,7 @@
 import React, {Fragment, Component,useState} from 'react';
+import { Alert,Platform } from 'react-native';
 import {launchCamera} from 'react-native-image-picker';
+import {request,check, PERMISSIONS,RESULTS, openSettings} from 'react-native-permissions';
 import {
   SafeAreaView,
   View,
@@ -16,8 +18,61 @@ export default class Camera extends Component {
     super(props);
     this.state = {
       fileUri: '',
+      cameraPermission:''
     };
   }
+
+  componentDidMount() {
+   this.checkCameraPermission();  
+  }
+
+  checkCameraPermission(){
+
+    check(Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA :PERMISSIONS.ANDROID.CAMERA).then((res) => {
+        switch (res) {
+          case RESULTS.DENIED:
+                request(Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA :PERMISSIONS.ANDROID.CAMERA).then((result) =>{
+                switch (result) {
+                  case RESULTS.GRANTED:
+                    this.setState({cameraPermission: RESULTS.GRANTED})
+                    break;
+                  case RESULTS.BLOCKED:
+                    this.setState({cameraPermission: RESULTS.BLOCKED})
+                    this.cameraPermissionBlocked();
+                    break;
+                  case RESULTS.DENIED:
+                    this.setState({cameraPermission: RESULTS.DENIED}) 
+                    break;
+                }
+                })
+                break;
+          case RESULTS.GRANTED:
+               this.setState({cameraPermission: RESULTS.GRANTED})
+            break;
+          case RESULTS.BLOCKED:
+            this.setState({cameraPermission: RESULTS.BLOCKED});
+            this.cameraPermissionBlocked();
+            break;
+          
+        }
+    })
+  }
+
+  cameraPermissionBlocked() {
+
+    Alert.alert('Camera Permission Blocked',
+    'Please provide camera permission from setting of your device.',
+    [
+      { text: 'Open Setting'  ,onPress: () => {
+                                                openSettings();
+                                               }
+       },
+      { text: 'Cancel'},
+    ],
+    { cancelable: false }
+  );
+  }
+
 
   takePicture = () => {
     let options = {
@@ -62,6 +117,7 @@ export default class Camera extends Component {
         <StatusBar barStyle="dark-content" />
         <SafeAreaView>
           <Header title='Camera'/>
+          {this.state.cameraPermission===RESULTS.GRANTED?
           <View style={styles.body}>
             <Text
               style={{textAlign: 'center', fontSize: 20, paddingBottom: 10}}>
@@ -78,7 +134,17 @@ export default class Camera extends Component {
                 <Text style={styles.btnText}>Directly Launch Camera</Text>
               </TouchableOpacity>
             </View>
+          </View>:
+          <View style={styles.body}>
+            <View style={styles.btnParentSection}>
+              <TouchableOpacity
+                onPress={this.checkCameraPermission}
+                style={styles.btnSection}>
+                <Text style={styles.btnText}>Allow Camera Permission</Text>
+              </TouchableOpacity>
+            </View>
           </View>
+          }
         </SafeAreaView>
       </Fragment>
     );

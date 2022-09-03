@@ -1,2 +1,2 @@
-import StoreDataNavigator from "./storeDataNavigatorStack";
+import StoreDataNavigator from "./StoreDataNavigatorStack";
 export default StoreDataNavigator;
